@@ -153,6 +153,16 @@ void ModbusRtuSlaveClass::process() {
         memcpy(_outBuff + 2, _inBuff + 2, 4);
       }
       break;
+    case MB_FC_TRANSFER_RAW:
+      qty = _inBuff[2];
+      data = _inBuff + 3;
+      if (qty < 0x0001 || qty > 0x007B) {
+        exCode = MB_EX_ILLEGAL_DATA_VALUE;
+      } else {
+        pduLen = 5;
+        _outBuff[2] = qty;
+      }
+      break;
 
     default:
       exCode = MB_EX_ILLEGAL_FUNCTION;
